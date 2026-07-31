@@ -1,5 +1,8 @@
 import streamlit as st
+
 from utils.gemini import search_medicine
+from utils.history import add_history
+from utils.pdf import create_pdf
 
 st.set_page_config(
     page_title="Medicine Search",
@@ -7,38 +10,81 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🔍 Medicine Search")
+st.title("🔍 AI Medicine Search")
 
 st.write("""
-Search any medicine and PillVision AI will provide detailed information.
+Search any medicine by entering its name.
+
+Examples:
+- Dolo 650
+- Paracetamol
+- Crocin
+- Azithromycin
+- Cetirizine
 """)
 
 medicine = st.text_input(
-    "💊 Enter Medicine Name",
-    placeholder="Example: Dolo 650, Crocin, Paracetamol..."
+    "💊 Medicine Name",
+    placeholder="Enter medicine name..."
 )
 
-if st.button("🔍 Search Medicine"):
+col1, col2 = st.columns(2)
+
+with col1:
+
+    search_btn = st.button(
+        "🔍 Search Medicine",
+        use_container_width=True
+    )
+
+with col2:
+
+    clear_btn = st.button(
+        "🗑 Clear",
+        use_container_width=True
+    )
+
+if clear_btn:
+    st.rerun()
+
+if search_btn:
 
     if medicine.strip() == "":
+
         st.warning("Please enter a medicine name.")
+
     else:
 
-        with st.spinner("Searching..."):
+        with st.spinner("Searching medicine..."):
 
             try:
-from utils.history import add_history
-             result = search_medicine(medicine)
 
-add_history(
-    "Medicine Search",
-    medicine,
-    result
-)
+                result = search_medicine(medicine)
 
-st.success("Medicine Found")
+                add_history(
+                    "Medicine Search",
+                    medicine,
+                    result
+                )
 
-st.markdown(result)
+                st.success("Medicine Found")
+
+                st.markdown("---")
+
+                st.markdown(result)
+
+                pdf_file = create_pdf(result)
+
+                with open(pdf_file, "rb") as file:
+
+                    st.download_button(
+                        "📄 Download PDF Report",
+                        data=file,
+                        file_name=f"{medicine}_Report.pdf",
+                        mime="application/pdf",
+                        use_container_width=True
+                    )
+
             except Exception as e:
 
                 st.error("Unable to search medicine.")
@@ -47,26 +93,29 @@ st.markdown(result)
 
 st.markdown("---")
 
-st.info("""
-Examples
+st.subheader("💡 Popular Medicines")
 
-• Dolo 650
+c1, c2, c3 = st.columns(3)
 
-• Paracetamol
+with c1:
+    st.info("💊 Dolo 650")
+    st.info("💊 Crocin")
+    st.info("💊 Calpol")
 
-• Azithromycin
+with c2:
+    st.info("💊 Cetirizine")
+    st.info("💊 Ibuprofen")
+    st.info("💊 Paracetamol")
 
-• Crocin
+with c3:
+    st.info("💊 Azithromycin")
+    st.info("💊 Amoxicillin")
+    st.info("💊 Pantoprazole")
 
-• Amoxicillin
-
-• Cetirizine
-
-• Ibuprofen
-""")
+st.markdown("---")
 
 st.warning("""
-⚠️ Educational purposes only.
+⚠️ PillVision AI provides educational information only.
 
-Always consult a doctor or pharmacist before taking medicines.
+Always consult a qualified doctor or pharmacist before taking any medicine.
 """)
