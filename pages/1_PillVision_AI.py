@@ -3,7 +3,7 @@ from google import genai
 from PIL import Image
 
 client = genai.Client(
-    api_key="YOUR_GEMINI_API_KEY"
+    api_key="AQ.Ab8RN6JE5z4DbCvTB2wRJWzhd7FYjDOEAC07y6f0F58Yy3TtCQ"
 )
 
 st.title("💊 PillVision AI")
