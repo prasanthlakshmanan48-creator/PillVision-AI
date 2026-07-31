@@ -1,55 +1,77 @@
 import streamlit as st
-from google import genai
 from PIL import Image
+from utils.gemini import analyze_medicine_image
 
-client = genai.Client(
-    api_key="AQ.Ab8RN6JE5z4DbCvTB2wRJWzhd7FYjDOEAC07y6f0F58Yy3TtCQ"
+st.set_page_config(
+    page_title="Scan Medicine",
+    page_icon="💊",
+    layout="wide"
 )
 
-st.title("💊 PillVision AI")
+st.title("💊 Scan Medicine")
+
+st.write(
+    """
+Upload a medicine strip, medicine box, or bottle image.
+
+PillVision AI will identify the medicine and provide educational information.
+"""
+)
 
 uploaded_file = st.file_uploader(
-    "Upload Medicine Strip",
-    type=["jpg","jpeg","png"]
+    "📷 Upload Medicine Image",
+    type=["jpg", "jpeg", "png"]
 )
 
 if uploaded_file:
 
     image = Image.open(uploaded_file)
 
-    st.image(image, use_container_width=True)
+    col1, col2 = st.columns([1, 2])
 
-    if st.button("Analyze Medicine"):
+    with col1:
+        st.image(
+            image,
+            caption="Uploaded Medicine",
+            use_container_width=True
+        )
 
-        with st.spinner("Analyzing..."):
+    with col2:
 
-            prompt = """
-Analyze this medicine image.
+        st.info("Click the button below to analyze the medicine.")
 
-Provide:
+        if st.button("🔍 Analyze Medicine"):
 
-Medicine Name
+            with st.spinner("Analyzing medicine..."):
 
-Active Ingredient
+                try:
 
-Uses
+                    result = analyze_medicine_image(image)
 
-Typical Dosage
+                    st.success("Analysis Completed")
 
-Common Side Effects
+                    st.markdown("---")
 
-Drug Interactions
+                    st.markdown(result)
 
-Warnings
+                except Exception as e:
 
-If the medicine cannot be identified, clearly mention that.
+                    st.error("Analysis failed.")
+
+                    st.exception(e)
+
+st.markdown("---")
+
+st.warning(
+    """
+⚠️ Disclaimer
+
+PillVision AI provides educational information only.
+
+• Do not use this app as a substitute for professional medical advice.
+
+• Always verify medicine information with a qualified healthcare professional.
+
+• Never start, stop, or change medication based only on AI output.
 """
-
-            response = client.models.generate_content(
-                model="gemini-3.5-flash",
-                contents=[prompt,image]
-            )
-
-            st.success("Analysis Completed")
-
-            st.write(response.text)
+)
