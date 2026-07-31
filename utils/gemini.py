@@ -1,19 +1,21 @@
 from config import client, MODEL_NAME
-from PIL import Image
-
 
 # ==========================================
-# Medicine Image Analysis
+# Scan Medicine Image
 # ==========================================
 
-def analyze_medicine_image(image):
+def analyze_medicine_image(image, ocr_text=""):
 
-    prompt = """
-You are an expert pharmacist and healthcare assistant.
+    prompt = f"""
+You are an expert pharmacist.
 
-Analyze the uploaded medicine image.
+OCR Text:
 
-Provide your answer in the following format.
+{ocr_text}
+
+Use BOTH the uploaded medicine image and OCR text.
+
+Provide:
 
 💊 Medicine Name
 
@@ -26,7 +28,6 @@ Provide your answer in the following format.
 🩺 Uses
 
 💊 Typical Dosage
-(General information only)
 
 ⚠️ Common Side Effects
 
@@ -44,19 +45,13 @@ Provide your answer in the following format.
 
 👶 Pediatric Use
 
-📦 Storage Instructions
+📦 Storage
 
-💵 Approximate Price (if known)
+💵 Approximate Price
 
 📝 Summary
 
-If the medicine cannot be identified clearly,
-say:
-
-"Medicine could not be identified confidently.
-Please upload a clearer image."
-
-Do not invent information.
+If not confident, clearly say so.
 """
 
     response = client.models.generate_content(
@@ -71,17 +66,14 @@ Do not invent information.
 # Medicine Search
 # ==========================================
 
-def search_medicine(medicine_name):
+def search_medicine(name):
 
     prompt = f"""
-You are an expert pharmacist.
+Give detailed information about:
 
-Provide complete information about:
+{name}
 
-Medicine:
-{medicine_name}
-
-Include
+Include:
 
 Medicine Name
 
@@ -89,13 +81,15 @@ Active Ingredient
 
 Uses
 
-Typical Dosage
+Dosage
 
-Common Side Effects
+Side Effects
 
 Drug Interactions
 
 Warnings
+
+Storage
 
 Pregnancy
 
@@ -105,11 +99,7 @@ Food Interaction
 
 Alcohol Interaction
 
-Storage
-
 Approximate Price
-
-Do not invent information.
 """
 
     response = client.models.generate_content(
@@ -121,32 +111,27 @@ Do not invent information.
 
 
 # ==========================================
-# Drug Interaction Checker
+# Drug Interaction
 # ==========================================
 
-def drug_interaction(medicine1, medicine2):
+def drug_interaction(med1, med2):
 
     prompt = f"""
-Check interaction between
+Check interaction.
 
 Medicine 1:
-{medicine1}
+{med1}
 
 Medicine 2:
-{medicine2}
+{med2}
 
 Return
 
 Risk Level
 
-Interaction
-
 Reason
 
 Recommendation
-
-If interaction is unknown,
-say so clearly.
 """
 
     response = client.models.generate_content(
@@ -158,7 +143,7 @@ say so clearly.
 
 
 # ==========================================
-# AI Health Chat
+# AI Chat
 # ==========================================
 
 def health_chat(question):
@@ -166,16 +151,13 @@ def health_chat(question):
     prompt = f"""
 You are PillVision AI.
 
-Answer only healthcare
-and medicine-related questions.
+Answer only medicine and healthcare questions.
 
 Question:
 
 {question}
 
-Give safe, educational guidance.
-Do not diagnose diseases.
-Advise consulting a healthcare professional for emergencies.
+Provide educational guidance only.
 """
 
     response = client.models.generate_content(
