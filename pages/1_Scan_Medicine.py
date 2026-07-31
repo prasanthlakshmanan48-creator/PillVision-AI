@@ -45,14 +45,18 @@ if uploaded_file:
             with st.spinner("Analyzing medicine..."):
 
                 try:
+from utils.history import add_history
+                  result = analyze_medicine_image(image)
 
-                    result = analyze_medicine_image(image)
+add_history(
+    "Medicine Scan",
+    "Medicine Image Analysis",
+    result
+)
 
-                    st.success("Analysis Completed")
+st.success("Analysis Completed")
 
-                    st.markdown("---")
-
-                    st.markdown(result)
+st.markdown(result)
 
                 except Exception as e:
 
