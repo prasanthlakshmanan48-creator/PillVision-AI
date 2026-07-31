@@ -1,49 +1,63 @@
 import streamlit as st
-from datetime import datetime
+from utils.history import (
+    get_history,
+    clear_history
+)
 
-# --------------------------------------
-# Initialize History
-# --------------------------------------
+st.set_page_config(
+    page_title="History",
+    page_icon="📚",
+    layout="wide"
+)
 
-def initialize_history():
+st.title("📚 Scan History")
 
-    if "history" not in st.session_state:
-        st.session_state.history = []
+st.write("""
+View all previous:
 
+• Medicine Scans
 
-# --------------------------------------
-# Add New Record
-# --------------------------------------
+• Medicine Searches
 
-def add_history(history_type, title, content):
+• Drug Interaction Checks
 
-    initialize_history()
+• AI Health Chats
+""")
 
-    record = {
-        "time": datetime.now().strftime("%d-%m-%Y %H:%M"),
-        "type": history_type,
-        "title": title,
-        "content": content
-    }
+history = get_history()
 
-    st.session_state.history.insert(0, record)
+if len(history) == 0:
 
+    st.info("No history available.")
 
-# --------------------------------------
-# Get History
-# --------------------------------------
+else:
 
-def get_history():
+    st.success(f"{len(history)} Record(s) Found")
 
-    initialize_history()
+    st.markdown("---")
 
-    return st.session_state.history
+    for item in history:
 
+        with st.expander(
+            f"{item['type']} | {item['time']}"
+        ):
 
-# --------------------------------------
-# Clear History
-# --------------------------------------
+            st.subheader(item["title"])
 
-def clear_history():
+            st.write(item["content"])
 
-    st.session_state.history = []
+    st.markdown("---")
+
+    if st.button("🗑️ Clear History"):
+
+        clear_history()
+
+        st.success("History Cleared")
+
+        st.rerun()
+
+st.markdown("---")
+
+st.info(
+    "History is currently stored for this session only."
+)
