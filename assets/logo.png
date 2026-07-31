@@ -1,1 +1,10 @@
+st.image("assets/logo.png", width=120)
 
+st.markdown(
+"""
+<h1 class='main-title'>
+PillVision AI
+</h1>
+""",
+unsafe_allow_html=True
+)
