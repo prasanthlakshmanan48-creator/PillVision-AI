@@ -1,29 +1,61 @@
+/* ============================= */
+/* PillVision AI Theme */
+/* ============================= */
+
 .main-title{
     text-align:center;
-    font-size:45px;
-    color:#2563EB;
+    font-size:52px;
     font-weight:bold;
+    color:#2563EB;
+    margin-bottom:5px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#6B7280;
+    font-size:22px;
+    margin-bottom:20px;
 }
 
 .card{
-    padding:20px;
-    border-radius:15px;
     background:#F8FAFC;
+    border-radius:15px;
+    padding:20px;
     border:1px solid #E5E7EB;
     margin-top:10px;
     margin-bottom:10px;
 }
 
 .success-card{
+    background:#DCFCE7;
     padding:15px;
     border-radius:12px;
-    background:#DCFCE7;
-    color:#166534;
+    border-left:6px solid #22C55E;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 
 .warning-card{
+    background:#FEF3C7;
     padding:15px;
     border-radius:12px;
-    background:#FEF3C7;
-    color:#92400E;
+    border-left:6px solid #F59E0B;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.info-card{
+    background:#DBEAFE;
+    padding:15px;
+    border-radius:12px;
+    border-left:6px solid #3B82F6;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.footer{
+    text-align:center;
+    color:gray;
+    font-size:15px;
+    margin-top:40px;
 }
