@@ -1,18 +1,21 @@
 # 💊 PillVision AI
 
-AI-powered medicine identification system.
+AI Powered Medicine Recognition System
 
 ## Features
 
-- Upload medicine strip
-- AI identifies medicine
-- Uses
-- Dosage
-- Side effects
-- Drug interactions
+- Scan Medicine
+- Medicine Search
+- Drug Interaction Checker
+- AI Health Chat
+- OCR
+- PDF Report
+- History
 
-Built with:
+## Built Using
 
-- Streamlit
-- Google Gemini
 - Python
+- Streamlit
+- Gemini AI
+- EasyOCR
+- ReportLab
