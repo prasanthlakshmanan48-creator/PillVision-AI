@@ -1,21 +1,47 @@
 # 💊 PillVision AI
 
-AI Powered Medicine Recognition System
+An AI-powered medicine recognition system built using Streamlit, Google Gemini AI, OCR and Python.
+
+---
 
 ## Features
 
-- Scan Medicine
-- Medicine Search
-- Drug Interaction Checker
-- AI Health Chat
-- OCR
-- PDF Report
-- History
+✅ Scan Medicine
 
-## Built Using
+✅ OCR Text Detection
 
-- Python
-- Streamlit
-- Gemini AI
-- EasyOCR
-- ReportLab
+✅ AI Medicine Search
+
+✅ Drug Interaction Checker
+
+✅ AI Health Chat
+
+✅ PDF Report
+
+✅ Scan History
+
+---
+
+## Technologies
+
+Python
+
+Streamlit
+
+Gemini AI
+
+EasyOCR
+
+ReportLab
+
+NumPy
+
+Pillow
+
+---
+
+## Installation
+
+pip install -r requirements.txt
+
+streamlit run app.py
