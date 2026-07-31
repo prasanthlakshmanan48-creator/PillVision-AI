@@ -39,17 +39,21 @@ if st.button("🔍 Check Interaction"):
         with st.spinner("Checking Drug Interaction..."):
 
             try:
+from utils.history import add_history
+               result = drug_interaction(
+    medicine1,
+    medicine2
+)
 
-                result = drug_interaction(
-                    medicine1,
-                    medicine2
-                )
+add_history(
+    "Drug Interaction",
+    f"{medicine1} + {medicine2}",
+    result
+)
 
-                st.success("Interaction Analysis Completed")
+st.success("Interaction Analysis Completed")
 
-                st.markdown("---")
-
-                st.markdown(result)
+st.markdown(result)
 
             except Exception as e:
 
