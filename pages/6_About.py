@@ -2,126 +2,115 @@ import streamlit as st
 
 st.set_page_config(
     page_title="About",
-    page_icon="ℹ️",
+    page_icon="ℹ",
     layout="wide"
 )
 
-st.title("ℹ️ About PillVision AI")
+st.title("ℹ About PillVision AI")
 
 st.markdown("""
 # 💊 PillVision AI
 
-PillVision AI is an AI-powered medicine recognition and healthcare assistant.
-
-It helps users identify medicines from images and provides educational information about medicines using Google's Gemini AI.
+AI Powered Medicine Recognition System
 """)
 
 st.markdown("---")
 
 st.header("🚀 Features")
 
-col1, col2 = st.columns(2)
+features=[
+"📷 Scan Medicine",
+"🔍 Medicine Search",
+"⚠ Drug Interaction",
+"💬 AI Health Chat",
+"📚 History",
+"📄 PDF Report",
+"📝 OCR",
+"🤖 Gemini AI"
+]
 
-with col1:
-
-    st.success("📷 Scan Medicine")
-
-    st.success("🔍 Medicine Search")
-
-    st.success("⚠️ Drug Interaction Checker")
-
-    st.success("💬 AI Health Chat")
-
-with col2:
-
-    st.success("📚 Scan History")
-
-    st.success("📄 PDF Report")
-
-    st.success("📝 OCR Text Recognition")
-
-    st.success("🤖 Gemini AI")
+for feature in features:
+    st.success(feature)
 
 st.markdown("---")
 
-st.header("🛠 Technologies Used")
+st.header("🛠 Technology")
 
 st.info("""
-• Python
+Python
 
-• Streamlit
+Streamlit
 
-• Google Gemini AI
+Gemini AI
 
-• EasyOCR
+EasyOCR
 
-• ReportLab
+ReportLab
 
-• Pillow
+Pillow
 
-• NumPy
-
-• OpenCV
+NumPy
 """)
 
 st.markdown("---")
 
-st.header("📋 Version")
+st.header("📦 Version")
 
-st.write("Version : **1.0**")
+st.write("Version : 2.0")
 
-st.write("Status : **Development**")
+st.write("Platform : Streamlit")
 
-st.write("Platform : **Streamlit**")
-
-st.write("Language : **Python**")
-
-st.markdown("---")
-
-st.header("🎯 Future Updates")
-
-st.write("✅ Medicine Scanner")
-
-st.write("✅ AI Medicine Search")
-
-st.write("✅ Drug Interaction Checker")
-
-st.write("✅ AI Health Chat")
-
-st.write("🔜 Voice Assistant")
-
-st.write("🔜 Barcode Scanner")
-
-st.write("🔜 Medicine Reminder")
-
-st.write("🔜 User Login")
-
-st.write("🔜 Permanent Cloud History")
-
-st.write("🔜 Mobile App")
+st.write("Status : Development")
 
 st.markdown("---")
 
 st.header("👨‍💻 Developer")
 
-st.write("Developed by:")
+st.write("Name : Prasanth L")
 
-st.write("**Prasanth L**")
+st.write("Department : Biomedical Engineering")
 
-st.write("Biomedical Engineering Student")
+st.write("Project : PillVision AI")
 
 st.markdown("---")
 
-st.header("⚠️ Medical Disclaimer")
+st.header("🔮 Upcoming Features")
+
+st.success("📸 Camera Scan")
+
+st.success("🔊 Voice Assistant")
+
+st.success("🌍 Multi Language")
+
+st.success("📱 Android App")
+
+st.success("☁ Cloud Database")
+
+st.success("🔐 Login System")
+
+st.success("💊 Medicine Reminder")
+
+st.markdown("---")
 
 st.warning("""
-PillVision AI is intended for educational and informational purposes only.
+⚠ Medical Disclaimer
 
-The information provided by this application should not replace professional medical advice, diagnosis, or treatment.
+This application is for educational purposes only.
 
-Always consult a qualified doctor or pharmacist before taking, stopping, or changing any medication.
+Always consult a qualified doctor or pharmacist before taking medicines.
 """)
 
 st.markdown("---")
 
-st.success("Thank you for using 💊 PillVision AI ❤️")
+st.markdown(
+"""
+<center>
+
+Made with ❤️ using
+
+Python | Streamlit | Gemini AI
+
+</center>
+""",
+unsafe_allow_html=True
+)
