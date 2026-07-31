@@ -52,10 +52,16 @@ if question:
         with st.spinner("Thinking..."):
 
             try:
+from utils.history import add_history
+              answer = health_chat(question)
 
-                answer = health_chat(question)
+add_history(
+    "AI Chat",
+    question,
+    answer
+)
 
-                st.markdown(answer)
+st.markdown(answer)
 
                 st.session_state.messages.append(
                     {
