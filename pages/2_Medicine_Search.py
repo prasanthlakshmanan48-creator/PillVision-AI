@@ -27,15 +27,18 @@ if st.button("🔍 Search Medicine"):
         with st.spinner("Searching..."):
 
             try:
+from utils.history import add_history
+             result = search_medicine(medicine)
 
-                result = search_medicine(medicine)
+add_history(
+    "Medicine Search",
+    medicine,
+    result
+)
 
-                st.success("Medicine Found")
+st.success("Medicine Found")
 
-                st.markdown("---")
-
-                st.markdown(result)
-
+st.markdown(result)
             except Exception as e:
 
                 st.error("Unable to search medicine.")
