@@ -1,1 +1,29 @@
+.main-title{
+    text-align:center;
+    font-size:45px;
+    color:#2563EB;
+    font-weight:bold;
+}
 
+.card{
+    padding:20px;
+    border-radius:15px;
+    background:#F8FAFC;
+    border:1px solid #E5E7EB;
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.success-card{
+    padding:15px;
+    border-radius:12px;
+    background:#DCFCE7;
+    color:#166534;
+}
+
+.warning-card{
+    padding:15px;
+    border-radius:12px;
+    background:#FEF3C7;
+    color:#92400E;
+}
