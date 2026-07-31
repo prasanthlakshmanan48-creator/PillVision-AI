@@ -1,5 +1,8 @@
 import streamlit as st
+
 from utils.gemini import health_chat
+from utils.history import add_history
+from utils.pdf import create_pdf
 
 st.set_page_config(
     page_title="AI Health Chat",
@@ -10,7 +13,7 @@ st.set_page_config(
 st.title("💬 AI Health Chat")
 
 st.write("""
-Ask healthcare or medicine-related questions.
+Ask medicine and healthcare related questions.
 
 Examples:
 
@@ -20,27 +23,37 @@ Examples:
 
 • Can I take Ibuprofen with alcohol?
 
-• Which medicine is used for fever?
+• What medicine is used for fever?
 """)
 
-# Initialize chat history
+# -----------------------------
+# Initialize Chat
+# -----------------------------
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Show previous messages
+# -----------------------------
+# Display Chat
+# -----------------------------
+
 for message in st.session_state.messages:
+
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Chat input
+# -----------------------------
+# Chat Input
+# -----------------------------
+
 question = st.chat_input("Ask your health question...")
 
 if question:
 
     st.session_state.messages.append(
         {
-            "role": "user",
-            "content": question
+            "role":"user",
+            "content":question
         }
     )
 
@@ -52,34 +65,94 @@ if question:
         with st.spinner("Thinking..."):
 
             try:
-from utils.history import add_history
-              answer = health_chat(question)
 
-add_history(
-    "AI Chat",
-    question,
-    answer
-)
+                answer = health_chat(question)
 
-st.markdown(answer)
+                st.markdown(answer)
+
+                add_history(
+                    "AI Chat",
+                    question,
+                    answer
+                )
 
                 st.session_state.messages.append(
                     {
-                        "role": "assistant",
-                        "content": answer
+                        "role":"assistant",
+                        "content":answer
                     }
                 )
 
             except Exception as e:
 
-                st.error("Unable to get response.")
+                st.error("Unable to get AI response.")
 
                 st.exception(e)
+
+# -----------------------------
+# Sidebar
+# -----------------------------
+
+st.sidebar.header("Chat Options")
+
+if st.sidebar.button("🗑 Clear Chat"):
+
+    st.session_state.messages = []
+
+    st.rerun()
+
+# -----------------------------
+# Download Conversation
+# -----------------------------
+
+if len(st.session_state.messages) > 0:
+
+    conversation = ""
+
+    for msg in st.session_state.messages:
+
+        conversation += (
+            f"{msg['role'].upper()}\n"
+            f"{msg['content']}\n\n"
+        )
+
+    pdf = create_pdf(conversation)
+
+    with open(pdf, "rb") as file:
+
+        st.sidebar.download_button(
+            "📄 Download Chat",
+            data=file,
+            file_name="AI_Health_Chat.pdf",
+            mime="application/pdf"
+        )
+
+# -----------------------------
+# Examples
+# -----------------------------
+
+st.markdown("---")
+
+st.subheader("💡 Suggested Questions")
+
+st.info("""
+💊 Can I take Dolo 650 after food?
+
+🤰 Is Crocin safe during pregnancy?
+
+🍺 Can I drink alcohol after taking antibiotics?
+
+🤒 Which medicine is used for fever?
+
+👶 Can children take Paracetamol?
+""")
 
 st.markdown("---")
 
 st.warning("""
-⚠️ PillVision AI is an educational assistant.
+⚠️ PillVision AI provides educational information only.
 
-Do not use it for emergencies or as a substitute for professional medical advice.
+Do not use this assistant for emergencies or self-diagnosis.
+
+Always consult a qualified healthcare professional.
 """)
