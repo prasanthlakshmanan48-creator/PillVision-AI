@@ -1,159 +1,181 @@
 import streamlit as st
-from utils.gemini import search_medicine
+from utils.gemini import health_chat
 from utils.history import add_history
 from utils.pdf import create_pdf
 
 st.set_page_config(
-    page_title="Medicine Search",
-    page_icon="🔍",
+    page_title="AI Health Chat",
+    page_icon="💬",
     layout="wide"
 )
 
-st.title("🔍 AI Medicine Search")
+st.title("💬 AI Health Chat")
 
 st.markdown("""
-Search any medicine using its **Brand Name** or **Generic Name**.
+Ask medicine and healthcare-related questions.
 
-### Examples
+### Example Questions
 
-- Dolo 650
-- Crocin
-- Paracetamol
-- Cetirizine
-- Azithromycin
-- Amoxicillin
+• Can I take Dolo 650 after food?
+
+• Is Paracetamol safe during pregnancy?
+
+• Can I take Ibuprofen with alcohol?
+
+• Which medicine is used for fever?
+
+• What are the side effects of Azithromycin?
 """)
 
 st.markdown("---")
 
-medicine = st.text_input(
-    "💊 Medicine Name",
-    placeholder="Example: Dolo 650"
+# ==============================
+# Chat History
+# ==============================
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+# ==============================
+# Display Previous Messages
+# ==============================
+
+for msg in st.session_state.chat_history:
+
+    with st.chat_message(msg["role"]):
+        st.markdown(msg["content"])
+
+# ==============================
+# User Input
+# ==============================
+
+question = st.chat_input(
+    "Ask your health question..."
 )
 
-col1, col2 = st.columns(2)
+if question:
 
-with col1:
-    search = st.button(
-        "🔍 Search",
-        use_container_width=True
-    )
+    st.session_state.chat_history.append({
+        "role":"user",
+        "content":question
+    })
 
-with col2:
-    clear = st.button(
-        "🗑 Clear",
-        use_container_width=True
-    )
+    with st.chat_message("user"):
+        st.markdown(question)
 
-if clear:
-    st.rerun()
+    with st.chat_message("assistant"):
 
-if search:
-
-    if medicine.strip() == "":
-
-        st.warning("Please enter a medicine name.")
-
-    else:
-
-        with st.spinner("Searching Medicine..."):
+        with st.spinner("Thinking..."):
 
             try:
 
-                result = search_medicine(medicine)
+                answer = health_chat(question)
+
+                st.markdown(answer)
+
+                st.session_state.chat_history.append({
+                    "role":"assistant",
+                    "content":answer
+                })
 
                 add_history(
-                    "Medicine Search",
-                    medicine,
-                    result
+                    "AI Chat",
+                    question,
+                    answer
                 )
-
-                st.success("Medicine Found")
-
-                st.markdown("---")
-
-                st.markdown(result)
-
-                pdf = create_pdf(result)
-
-                with open(pdf, "rb") as file:
-
-                    st.download_button(
-                        "📄 Download PDF Report",
-                        file,
-                        file_name=f"{medicine}.pdf",
-                        mime="application/pdf",
-                        use_container_width=True
-                    )
 
             except Exception as e:
 
-                st.error("Unable to search medicine.")
+                st.error("Unable to generate response.")
 
                 st.exception(e)
 
 st.markdown("---")
 
-st.subheader("💊 Popular Medicines")
+# ==============================
+# Sidebar
+# ==============================
 
-c1, c2, c3 = st.columns(3)
+st.sidebar.header("⚙ Chat Options")
 
-with c1:
+if st.sidebar.button("🗑 Clear Chat"):
 
-    st.info("Paracetamol")
+    st.session_state.chat_history = []
 
-    st.info("Crocin")
+    st.rerun()
 
-    st.info("Dolo 650")
+if len(st.session_state.chat_history)>0:
 
-with c2:
+    conversation=""
 
-    st.info("Ibuprofen")
+    for msg in st.session_state.chat_history:
 
-    st.info("Cetirizine")
+        conversation += (
+            f"{msg['role'].upper()}\n"
+            f"{msg['content']}\n\n"
+        )
 
-    st.info("Amoxicillin")
+    pdf=create_pdf(conversation)
 
-with c3:
+    with open(pdf,"rb") as file:
 
-    st.info("Azithromycin")
+        st.sidebar.download_button(
+            "📄 Download Chat PDF",
+            file,
+            file_name="AI_Health_Chat.pdf",
+            mime="application/pdf"
+        )
 
-    st.info("Pantoprazole")
+st.sidebar.markdown("---")
 
-    st.info("Metformin")
+st.sidebar.info("""
+Suggested Topics
+
+💊 Medicine Uses
+
+🤰 Pregnancy Safety
+
+🍺 Alcohol Interaction
+
+🥛 Food Interaction
+
+💉 Dosage
+
+⚠ Side Effects
+""")
 
 st.markdown("---")
 
-st.subheader("🩺 Information You Will Receive")
+st.subheader("💡 Suggested Questions")
 
-st.success("💊 Medicine Name")
+col1,col2=st.columns(2)
 
-st.success("🧪 Active Ingredient")
+with col1:
 
-st.success("🏭 Manufacturer")
+    st.info("""
+💊 Can I take Dolo 650 after food?
 
-st.success("🩺 Uses")
+🤒 What medicine is used for fever?
 
-st.success("💉 Dosage")
+🤰 Is Crocin safe during pregnancy?
+""")
 
-st.success("⚠️ Side Effects")
+with col2:
 
-st.success("🔄 Drug Interactions")
+    st.info("""
+🍺 Can I drink alcohol after antibiotics?
 
-st.success("🤰 Pregnancy")
+👶 Can children take Paracetamol?
 
-st.success("🍺 Alcohol Interaction")
-
-st.success("🥛 Food Interaction")
-
-st.success("📦 Storage")
-
-st.success("📝 Summary")
+💊 What are the side effects of Cetirizine?
+""")
 
 st.markdown("---")
 
 st.warning("""
-⚠️ PillVision AI is for educational purposes only.
+⚠ PillVision AI provides educational information only.
 
-Always consult a qualified healthcare professional before taking or changing any medication.
+Do not use this application for emergency medical situations.
+
+Always consult a qualified healthcare professional.
 """)
